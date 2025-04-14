@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Puzzle Rumah Adat - Menu Utama</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+       body {
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      color: white;
+      font-family: sans-serif;
+    }
+
+    .main-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100vh;
+      padding: 0 2rem;
+    }
+
+    .image-container {
+      width: 45%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .image-container img {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+
+    .menu-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Dua tombol per baris */
+  gap: 20px; /* Jarak antar tombol */
+  justify-content: center; /* Posisi di tengah horizontal */
+  align-items: center; /* Posisi di tengah vertikal */
+}
+
+
+
+.wavy-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px; /* Lebar tombol */
+  height: 80px; /* Tinggi tombol, sama dengan lebar */
+  background-color: rgba(255, 255, 255, 0.8); /* Warna latar tombol */
+  color: #333; /* Warna teks */
+  border: none; /* Pastikan tidak ada border */
+  border-radius: 8px; /* Sudut sedikit melengkung, ubah ke 0 jika ingin tajam */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Bayangan */
+  font-size: 14px; /* Ukuran font */
+  font-weight: bold; /* Tebal teks */
+  cursor: pointer; /* Kursor berubah jadi pointer */
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.wavy-btn:hover {
+  background-color: white; /* Warna tombol saat hover */
+  transform: scale(1.05); /* Efek zoom saat hover */
+}
+
+
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 250px;
+      height: 60px;
+      background-color: rgba(255, 255, 255, 0.8);
+      color: #333;
+      border-radius: 25px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: white;
+      transform: scale(1.05);
+    }
+
+    .btn svg {
+      margin-right: 10px;
+    }
+
+    .corner-card {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: white;
+      color: black;
+      padding: 10px 20px;
+      border-radius: 20px;
+    }
+
+    .suara-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 100px;
+      height: 60px;
+      background-color: rgba(255, 255, 255, 0.8);
+      color: #333;
+      border-radius: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .suara-btn:hover {
+      background-color: white;
+      transform: scale(1.05);
+    }
+
+    .suara-btn svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      width:100%;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: azure;
+      color: black;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      z-index: 9999;
+      width: 700px;
+      text-align: center;
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+    .modal-b {
+      display: none;
+      width:100%;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: black;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      z-index: 9999;
+      width: 300px;
+      text-align: center;
+    }
+    .modal {
+  @apply p-4 bg-white rounded-lg shadow-lg w-[90%] md:w-[600px] max-h-[90%] overflow-hidden mx-auto fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2;
+}
+
+
+
+    .modal-header {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .close-btn {
+      margin-top: 1rem;
+      background-color: #f00;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .popup-warning {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      z-index: 9999;
+    }
+
+    @keyframes wave {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      25% {
+        transform: translateY(-5px);
+      }
+      50% {
+        transform: translateY(5px);
+      }
+      75% {
+        transform: translateY(-5px);
+      }
+    }
+
+    .wavy-btn {
+      display:;
+      align-items: center;
+      justify-content: center;
+      width: 200px;
+      height: 100px;
+      background-color: rgba(255, 255, 255, 0.8);
+      color: #333;
+      border-radius: 25px;
+      animation: wave 2s infinite;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .wavy-btn:hover {
+      background-color: white;
+      transform: scale(1.05);
+    }
+    .wavy-btn img {
+      width:50%
+    }
+
+    .wavy-btn svg {
+      margin-right: 10px;
+    }
+    .puzzle-popup button {
+  display: block;
+  margin: 10px auto; /* Adjusted margin for spacing */
+  padding: 10px 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #333;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+  <!-- 'Tentang' Button in top-left corner -->
+  <a href="#" id="tentang-btn" class="corner-card">
+    Tentang
+  </a>
+
+  <!-- Modal for 'Tentang' -->
+  <div id="modal" class="modal">
+    <div class="modal-header">Profil Pengembang</div>
+    <div class="modal-content overflow-y-auto">
+      <!-- Bagian Gambar dan Informasi -->
+      <div class="flex items-start">
+        <!-- Gambar -->
+        <div class="modal-image mr-4">
+          <img src="./assets/images/profile.jpg" alt="Foto Pengembang" class="w-24 h-34 rounded-full" />
+        </div>
+        <!-- Informasi -->
+        <div class="modal-info text-left">
+          <p><strong>Nama:</strong> Siti Rohimah</p>
+          <p><strong>NIM:</strong> 2003010031</p>
+          <p><strong>Prodi:</strong> Teknik Informatika</p>
+          <p><strong>Universitas:</strong> Universitas Perjuangan Tasikmalaya</p>
+          <p><strong>Email:</strong> ntiwpandaa@gmail.com</p>
+          <p><strong>No Tlp:</strong> 088971449182</p>
+          <p><strong>Instagram:</strong> @4451my_</p>
+        </div>
+      </div>
+      <!-- Footer -->
+      <div class="modal-footer mt-4">
+        <p>
+          Aplikasi ini bertujuan untuk memfasilitasi pemahaman tentang mengenal rumah adat nusantara, 
+          mendorong belajar mandiri, membuat belajar menjadi menyenangkan, meningkatkan hasil belajar, 
+          dan mendukung guru dalam pengajaran.
+        </p>
+      </div>
+    </div>
+    <button class="close-btn" id="close-modal">Tutup</button>
+  </div>
+  
+  
+
+  <!-- Main Content -->
+  <div class="main-container">
+    <!-- Left Column: Image -->
+    <div class="image-container">
+      <img src="./assets/images/shine.png" alt="Puzzle Rumah Adat Image">
+    </div>
+
+    <!-- Right Column: Menu -->
+    <div class="menu-container">
+      <!-- Edukasi Button with Wavy Effect -->
+      <a href="edukasi.html" class="wavy-btn flex flex-col items-center justify-center">
+        <img src="./assets/images/i.png" alt="Belajar" class="mb-0" />
+        <span>Belajar</span>
+      </a>
+    
+      <!-- Quiz Button with Wavy Effect -->
+      <a href="cara-bermain.html" class="wavy-btn flex flex-col items-center justify-center">
+        <img src="./assets/images/c.png" alt="Belajar" class="mb-0" />
+        Kuis
+      </a>
+      <a href="#puzzle" id="puzzle-btn" class="wavy-btn flex flex-col items-center justify-center">
+        <img src="./assets/images/d.png" alt="Belajar" class="mb-0" />
+        Bermain
+      </a>
+    
+      <!-- Keluar Button with regular styling -->
+      <button id="keluar-btn" class="wavy-btn flex flex-col items-center justify-center">
+        <img src="./assets/images/x.png" alt="Belajar" class="mb-0" />
+        Keluar
+      </button>
+    </div>
+    
+  </div>
+
+  <!-- Suara Button in bottom-right corner -->
+
+
+    <!-- Modal for Puzzle Options -->
+<div id="puzzle-popup" class="modal-b">
+  <div class="modal-header">Pilih Wilayah</div>
+  <div class="modal-content">
+    <button id="baduy-btn" class="btn" onclick="selectOption('baduy')">Baduy</button><br />
+    <button id="diy-btn" class="btn" onclick="selectOption('diy')">DIY</button><br />
+    <button id="jakarta-btn" class="btn" onclick="selectOption('jakarta')">Jakarta</button><br />
+    <button id="jateng-btn" class="btn" onclick="selectOption('jateng')">Jawa Tengah</button>
+  </div>
+  <button class="close-btn" id="close-puzzle-modal">Tutup</button>
+</div>
+
+  <!-- Popup Warning -->
+  <div id="popup-warning" class="popup-warning">
+    Klik kembali 2x untuk keluar.
+  </div>
+
+  <!-- Audio file -->
+  <audio id="audio" src="music.mp3"></audio>
+  <button id="suara-btn" class="suara-btn" onclick="toggleMusic()">
+    <svg id="suara-icon" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <!-- Ikon Speaker On (dengan gelombang suara) -->
+      <g id="speaker-on">
+        <path d="M5 9v6h4l5 5V4l-5 5H5z"></path>
+        <path d="M15.54 8.46a5 5 0 010 7.07M17.54 6.46a8 8 0 010 11.31"></path>
+      </g>
+      <!-- Ikon Speaker Off (dengan tanda silang) -->
+      <g id="speaker-off" style="display: none;">
+        <path d="M5 9v6h4l5 5V4l-5 5H5z"></path>
+        <path d="M18 6L6 18M6 6l12 12"></path>
+      </g>
+    </svg>
+  </button>
+
+  <!-- Scripts -->
+  <script>
+    const audio = document.getElementById("audio");
+    const suaraIcon = document.getElementById("suara-icon");
+    const speakerOn = document.getElementById("speaker-on");
+    const speakerOff = document.getElementById("speaker-off");
+
+    function toggleMusic() {
+      if (audio.paused) {
+        audio.play();
+        speakerOn.style.display = "block";
+        speakerOff.style.display = "none";
+      } else {
+        audio.pause();
+        speakerOn.style.display = "none";
+        speakerOff.style.display = "block";
+      }
+    }
+
+    window.onload = function() {
+      audio.play();
+      speakerOn.style.display = "block";
+      speakerOff.style.display = "none";
+    };
+
+    const tentangBtn = document.getElementById('tentang-btn');
+    const modal = document.getElementById('modal');
+    const closeModal = document.getElementById('close-modal');
+
+    tentangBtn.addEventListener('click', () => modal.style.display = 'block');
+    closeModal.addEventListener('click', () => modal.style.display = 'none');
+    window.onclick = function(event) {
+      if (event.target == modal) modal.style.display = "none";
+    };
+  </script>
+
+
+<script>
+  
+    // Puzzle popup script
+    const puzzleBtn = document.getElementById('puzzle-btn');
+    const puzzlePopup = document.getElementById('puzzle-popup');
+    const closePuzzleModal = document.getElementById('close-puzzle-modal');
+  
+    puzzleBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      puzzlePopup.style.display = 'block';
+    });
+  
+    // Handle selection of regions
+    document.getElementById('baduy-btn').addEventListener('click', () => {
+      window.location.href = 'puzzle-baduy.html';
+    });
+  
+    document.getElementById('diy-btn').addEventListener('click', () => {
+      window.location.href = 'puzzle-diy.html';
+    });
+  
+    document.getElementById('jakarta-btn').addEventListener('click', () => {
+      window.location.href = 'puzzle-jakarta.html';
+    });
+  
+    document.getElementById('jateng-btn').addEventListener('click', () => {
+      window.location.href = 'puzzle-jateng.html';
+    });
+  
+    // Close the puzzle popup
+    closePuzzleModal.addEventListener('click', () => {
+      puzzlePopup.style.display = 'none';  // Hide the puzzle modal
+    });
+  
+    // Close the puzzle modal if clicking outside of it
+    window.addEventListener('click', (event) => {
+      if (event.target === puzzlePopup) {
+        puzzlePopup.style.display = 'none';
+      }
+    });
+
+    
+
+  </script>
+  
+</body>
+</html>

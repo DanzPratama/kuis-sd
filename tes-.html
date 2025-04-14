@@ -1,0 +1,60 @@
+<body>
+    <!-- Audio file -->
+    <audio id="audio" src="music.mp3" loop></audio>
+    <button id="suara-btn" class="suara-btn" onclick="toggleMusic()">
+      <svg id="suara-icon" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <!-- Ikon Speaker On (dengan gelombang suara) -->
+        <g id="speaker-on">
+          <path d="M5 9v6h4l5 5V4l-5 5H5z"></path>
+          <path d="M15.54 8.46a5 5 0 010 7.07M17.54 6.46a8 8 0 010 11.31"></path>
+        </g>
+        <!-- Ikon Speaker Off (dengan tanda silang) -->
+        <g id="speaker-off" style="display: none;">
+          <path d="M5 9v6h4l5 5V4l-5 5H5z"></path>
+          <path d="M18 6L6 18M6 6l12 12"></path>
+        </g>
+      </svg>
+    </button>
+  
+    <!-- Konten halaman dimuat dalam iframe -->
+    <iframe id="content-frame" src="index.html" frameborder="0" style="width: 100%; height: 90vh;"></iframe>
+  
+    <script>
+      const audio = document.getElementById("audio");
+      const suaraIcon = document.getElementById("suara-icon");
+      const speakerOn = document.getElementById("speaker-on");
+      const speakerOff = document.getElementById("speaker-off");
+  
+      function toggleMusic() {
+        if (audio.paused) {
+          audio.play();
+          speakerOn.style.display = "block";
+          speakerOff.style.display = "none";
+        } else {
+          audio.pause();
+          speakerOn.style.display = "none";
+          speakerOff.style.display = "block";
+        }
+      }
+  
+      // Memainkan musik saat halaman dimuat
+      window.onload = function () {
+        audio.play();
+        speakerOn.style.display = "block";
+        speakerOff.style.display = "none";
+      };
+  
+      // Navigasi halaman tanpa reload
+      function navigateTo(page) {
+        document.getElementById("content-frame").src = page;
+      }
+    </script>
+  
+    <!-- Navigasi -->
+    <nav>
+      <button onclick="navigateTo('index.html')">Menu Utama</button>
+      <button onclick="navigateTo('edukasi.html')">Edukasi</button>
+      <button onclick="navigateTo('kuis.html')">Kuis</button>
+    </nav>
+  </body>
+  

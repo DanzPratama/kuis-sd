@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puzzle Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .puzzle-piece {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #ccc;
+            cursor: grab;
+            background-size: 300%;
+            background-repeat: no-repeat;
+        }
+
+        .puzzle-slot {
+            width: 100px;
+            height: 100px;
+            border: 2px dashed #888;
+            background-color: #f0f0f0;
+        }
+
+        body {
+            position: relative;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298); /* Warna biru gradient modern */
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            background-color: #2a5298;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar a {
+            text-align: center;
+            font-size: 14px;
+            text-decoration: none;
+            color: white;
+            flex-grow: 1;
+            padding: 10px 0;
+        }
+
+        .navbar a:hover {
+            background-color: #1e3c72;
+        }
+
+        .navbar svg {
+            display: block;
+            margin: 0 auto 4px;
+            width: 24px;
+            height: 24px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <div class="flex flex-col items-center justify-center min-h-screen pb-20 p-8">
+        <h1 class="text-4xl font-bold text-white mb-4 text-center">Puzzle Rumah Adat Jawa Barat</h1>
+        
+        <div id="puzzle-board" class="grid grid-cols-3 grid-rows-3 gap-1 mb-4">
+            <!-- Puzzle slots will be generated here -->
+        </div>
+
+        <div id="puzzle-pieces" class="flex flex-wrap gap-2 justify-center mb-4">
+            <!-- Puzzle pieces will be generated here -->
+        </div>
+    </div>
+
+    <!-- Tombol Kembali, Home, Next -->
+    <div class="navbar">
+        <a href="dashboard.html">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7m-9 9v-8a2 2 0 012-2h4a2 2 0 012 2v8m-6-6h.01" />
+            </svg>
+            Home
+        </a>
+        <a href="javascript:history.back()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back
+        </a>
+        <a href="#next">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+            Next
+        </a>
+    </div>
+
+    <script>
+        const puzzleImages = [
+            'assets/images/puzzle1.jpg',
+        ];
+
+        let currentImageIndex = 0;
+        let score = 0;
+
+        function createPuzzle(imageSrc) {
+            const puzzleBoard = document.getElementById('puzzle-board');
+            const puzzlePieces = document.getElementById('puzzle-pieces');
+            puzzleBoard.innerHTML = '';
+            puzzlePieces.innerHTML = '';
+
+            const pieceIndices = [...Array(9).keys()];
+            const shuffledIndices = pieceIndices.sort(() => Math.random() - 0.5);
+
+            shuffledIndices.forEach(index => {
+                const piece = document.createElement('div');
+                piece.style.backgroundImage = `url(${imageSrc})`;
+
+                const xPosition = (index % 3) * -100; 
+                const yPosition = Math.floor(index / 3) * -100;
+
+                piece.style.backgroundPosition = `${xPosition}px ${yPosition}px`;
+                piece.classList.add('puzzle-piece');
+                piece.draggable = true;
+                piece.dataset.index = index;
+                piece.ondragstart = drag;
+
+                puzzlePieces.appendChild(piece);
+            });
+
+            for (let i = 0; i < 9; i++) {
+                const slot = document.createElement('div');
+                slot.classList.add('puzzle-slot');
+                slot.dataset.index = i;
+                slot.ondrop = drop;
+                slot.ondragover = allowDrop;
+                puzzleBoard.appendChild(slot);
+            }
+        }
+
+        function shufflePieces() {
+            createPuzzle(puzzleImages[currentImageIndex]);
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text/plain", event.target.dataset.index);
+        }
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const draggedIndex = event.dataTransfer.getData("text/plain");
+
+            if (event.target.classList.contains('puzzle-slot')) {
+                const draggedPiece = document.querySelector(`[data-index="${draggedIndex}"].puzzle-piece`);
+                if (draggedPiece) {
+                    const dropSlot = event.target;
+
+                    dropSlot.style.backgroundImage = draggedPiece.style.backgroundImage;
+                    dropSlot.style.backgroundPosition = draggedPiece.style.backgroundPosition;
+                    dropSlot.classList.add('puzzle-piece');
+                    dropSlot.classList.remove('puzzle-slot');
+                    dropSlot.draggable = false;
+
+                    draggedPiece.remove();
+
+                    checkSolved();
+                }
+            }
+        }
+
+        function checkSolved() {
+            const slots = [...document.querySelectorAll('#puzzle-board .puzzle-piece')];
+            let solved = true;
+
+            slots.forEach(slot => {
+                const position = slot.dataset.index;
+                const correctPosition = `${(position % 3) * -100}px ${(Math.floor(position / 3)) * -100}px`;
+
+                if (slot.style.backgroundPosition !== correctPosition) {
+                    solved = false;
+                }
+            });
+
+            if (solved && slots.length === 9) {
+                alert('Yee! Puzzle sudah diselesaikan');
+            }
+        }
+
+        // Initialize first puzzle
+        shufflePieces();
+    </script>
+</body>
+</html>
